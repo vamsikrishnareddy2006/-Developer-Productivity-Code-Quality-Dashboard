@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}DevPulse — About{% endblock %}
+{% block content %}
+
+<div class="hero">
+    <div class="eyebrow">about this project</div>
+    <h1>Why DevPulse exists</h1>
+    <p class="subtitle" style="max-width:60ch;">
+        A full-stack demonstration of connecting a trained machine learning model to a real,
+        working web application — end to end, with nothing mocked.
+    </p>
+</div>
+
+<div class="card">
+    <div class="card-title">aim</div>
+    <p class="risk-message" style="text-align:left; font-size:0.9rem; line-height:1.7;">
+        The aim of DevPulse is to help development teams monitor the health of their codebase and
+        commit activity in real time. By combining a machine learning model trained on developer
+        activity metrics — commit frequency, code review engagement, test coverage, and late-night
+        commits — with a Flask backend and an interactive interface, DevPulse automatically flags
+        risky commit patterns (Low, Medium, or High risk) before they lead to bugs, technical debt,
+        or production issues. Beyond prediction, the project demonstrates complete full-stack
+        integration: a trained model connected to a live web app, historical predictions persisted
+        in a database, and results presented through a clear, purpose-built interface.
+    </p>
+</div>
+
+<div class="stat-row">
+    <div class="stat-card">
+        <div class="stat-value" data-count="74.25" data-suffix="%">0%</div>
+        <div class="stat-label">model accuracy</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value" data-count="10" data-suffix="">0</div>
+        <div class="stat-label">features tracked</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value" data-count="3" data-suffix="">0</div>
+        <div class="stat-label">risk classes</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value" data-count="{{ stats.total }}" data-suffix="">0</div>
+        <div class="stat-label">your predictions</div>
+    </div>
+</div>
+
+<div class="result-grid">
+    <div class="card">
+        <div class="card-title">what drives the model</div>
+        <p class="hint" style="margin-bottom:1rem;">real feature importances from the trained RandomForest</p>
+        <div class="importance-chart">
+            {% for name, score in feature_importance %}
+            <div class="imp-row">
+                <span class="imp-label">{{ name.replace('_', ' ') }}</span>
+                <div class="imp-track">
+                    <div class="imp-fill" style="--target-width:{{ (score * 100) | round(1) }}%; animation-delay:{{ loop.index0 * 0.06 }}s;"></div>
+                </div>
+                <span class="imp-pct">{{ (score * 100) | round(1) }}%</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">your risk history</div>
+        {% if stats.total > 0 %}
+        <div class="donut-wrap">
+            <div class="donut"
+                 style="--low:{{ stats.counts.Low }}; --medium:{{ stats.counts.Medium }}; --high:{{ stats.counts.High }}; --total:{{ stats.total }};">
+                <div class="donut-center">
+                    <span class="donut-total">{{ stats.total }}</span>
+                    <span class="donut-total-label">total</span>
+                </div>
+            </div>
+            <div class="donut-legend">
+                <div class="legend-item"><span class="dot" style="background:var(--risk-low)"></span>Low <b>{{ stats.counts.Low }}</b></div>
+                <div class="legend-item"><span class="dot" style="background:var(--risk-medium)"></span>Medium <b>{{ stats.counts.Medium }}</b></div>
+                <div class="legend-item"><span class="dot" style="background:var(--risk-high)"></span>High <b>{{ stats.counts.High }}</b></div>
+            </div>
+        </div>
+        {% else %}
+        <p class="hint" style="padding:1.5rem 0;">You haven't run any predictions yet — your personal risk breakdown will appear here once you do.</p>
+        <a href="{{ url_for('predict_form') }}" class="btn btn-primary btn-sm">▸ run your first prediction</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="back-row">
+    <a href="{{ url_for('predict_form') }}" class="btn btn-primary">▸ try a prediction</a>
+</div>
+
+{% endblock %}
