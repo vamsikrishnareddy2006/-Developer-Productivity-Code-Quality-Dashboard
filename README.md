@@ -5,7 +5,7 @@
 
 ---
 
-## 0. What Changed Today
+## 1. What Changed Today
 
 The app was previously a single-page-feeling tool (form + result + history). Today it was split
 into four distinct, purpose-built pages, each with its own route and template:
@@ -20,13 +20,13 @@ into four distinct, purpose-built pages, each with its own route and template:
 The nav bar now links all four pages and highlights the active one. The signature pulse-line
 element and design language carry through every page for a consistent identity.
 
-## 1. What's New on Day 15 (carried forward)
+## 2. What's New on Day 15 (carried forward)
 
 - **SQLite integration** — every prediction is now logged to a local `predictions.db` (table `predictions`), and a new **History** page shows past predictions in a git-log style feed.
 - **Full redesign** — moved from a generic card-based light UI to a distinctive "developer vitals monitor" identity that fits DevPulse's own name and audience.
 - **Verified end-to-end**: form → Flask → model → SQLite → result → history, all tested live.
 
-## 2. Design Direction
+## 3. Design Direction
 
 DevPulse reads a developer's commit activity the way a heart-rate monitor reads vitals — so the whole UI leans into that metaphor instead of a generic dashboard look.
 
@@ -37,7 +37,7 @@ DevPulse reads a developer's commit activity the way a heart-rate monitor reads 
 - **History as git log:** past predictions are shown as rows styled like `git log --oneline`, with a colored commit dot per risk level.
 - Dark-only by design (no light/dark toggle) — a deliberate choice consistent with the "always-on monitor" feel, not an oversight.
 
-## 3. What Was Integrated
+## 4. What Was Integrated
 
 | Piece | Detail |
 |---|---|
@@ -46,7 +46,7 @@ DevPulse reads a developer's commit activity the way a heart-rate monitor reads 
 | SQLite | `predictions.db`, table `predictions(id, ts, <10 feature columns>, prediction, confidence)`, created automatically on first run via `init_db()` |
 | ML model | `best_model.pkl` (Random Forest) + `scaler.pkl`, loaded once at startup |
 
-## 4. Testing Evidence
+## 5. Testing Evidence
 
 Ran the server locally and tested every route with `curl`:
 
@@ -61,13 +61,13 @@ Ran the server locally and tested every route with `curl`:
 
 No errors or warnings in the Flask log during any of these requests.
 
-## 5. Screenshots
+## 6. Screenshots
 
 | Input Form | Prediction Result | History |
 |---|---|---|
 | `screenshots/1_input_form.png` | `screenshots/2_prediction_result.png` | `screenshots/3_history.png` |
 
-## 6. Project Structure
+## 7. Project Structure
 
 ```
 Day_15/
@@ -90,11 +90,11 @@ Day_15/
     └── js/script.js
 ```
 
-## 7. Running the Project
+## 8. Running the Project
 
 ```bash
 pip install -r requirements.txt
 python app.py
 ```
 
-Then open http://127.0.0.1:5000 — `predictions.db` is created automatically on first run.
+Then open https://developer-productivity-code-quality-uel5.onrender.com — `predictions.db` is created automatically on first run.
